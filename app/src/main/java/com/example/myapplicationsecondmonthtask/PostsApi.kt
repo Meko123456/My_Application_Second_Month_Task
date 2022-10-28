@@ -9,4 +9,5 @@ interface PostsApi {
     fun getPosts(): Call<ArrayList<Posts>>
     @GET("/posts/")
     fun getSeparatePost() : Call <Posts>
+
 }
