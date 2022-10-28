@@ -1,59 +1,86 @@
 package com.example.myapplicationsecondmonthtask
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.myapplicationsecondmonthtask.databinding.FragmentFullListBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FullListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FullListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentFullListBinding
+    private var filteredArrayList = arrayListOf<Posts>()
+    private var dataArrayList = arrayListOf<Posts>()
+    private var recyclerViewAdapter = NameAdapter()
+    private lateinit var viewModel: FullListFragmentViewModel
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_full_list, container, false)
-    }
+    ): View {
+        binding = FragmentFullListBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FullListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FullListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        viewModel = ViewModelProvider(this)[FullListFragmentViewModel::class.java]
+        getData()
+
+        binding.recyclerView.adapter = recyclerViewAdapter
+
+        /*val call: Call<ArrayList<Posts>> = RetrofitInstance.api.getPosts()
+
+        call.enqueue(object : Callback<ArrayList<Posts>> {
+            override fun onResponse(
+                call: Call<ArrayList<Posts>>,
+                response: Response<ArrayList<Posts>>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    recyclerViewAdapter.setData(response.body()!!)
+                    dataArrayList = response.body()!!
                 }
             }
+
+            override fun onFailure(call: Call<ArrayList<Posts>>, t: Throwable) {
+                Log.e(TAG, "Response Not Successful")
+            }
+
+        })*/
+        //dataArrayList = Posts
+
+
+        binding.editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(inputText: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                filteredArrayList = dataArrayList.filter {
+                    it.id.toString().startsWith(inputText.toString())
+                } as ArrayList<Posts>
+                if (inputText.toString().isEmpty()) {
+                    recyclerViewAdapter.setData(dataArrayList)
+                } else {
+                    recyclerViewAdapter.setData(filteredArrayList)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        }
+        )
+        return view
+    }
+
+    private fun getData () {
+        viewModel.getFullListDate().observe(viewLifecycleOwner) {
+            dataArrayList = it
+            recyclerViewAdapter.setData(dataArrayList)
+        }
     }
 }

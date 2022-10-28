@@ -1,54 +1,57 @@
-package com.example.myapplicationaboutrecyclerview10_18
+package com.example.myapplicationsecondmonthtask
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplicationsecondmonthtask.databinding.ListItemBinding
 
-//es aris adapteri klasi romelic akavshirebs informacias viewhodertan
-//daatas igebs wyarodan, am proeqtis shemtxvevashi gvaqvs listi mainActivityshi
-//da awvdis am datas viewholders, romelic tavsimxriv anaxlebs viewvs
-
-class NameAdapter(private val namesList: MutableList<String>):
+class NameAdapter :
     RecyclerView.Adapter<NameAdapter.NameViewHolder>() {
 
-    //es aris klasi romelci titoeul viewvs, romelic recyclershia, shesaxeb informacias inaxavs
-    //recycleri  qmnis imden veiwholders ramdenic itemi aqvs + ramdenime cacheshi
-
-    class NameViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var newList = ArrayList<Posts>()
 
 
-        private val flowerTextView: TextView =
-            itemView.findViewById(R.id.flower_text)
-        fun bind (S: String) {
-            flowerTextView.text = S
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NameViewHolder {
+
+        return NameViewHolder(
+            ListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+
+    fun setData(arrayList: ArrayList<Posts>) {
+        this.newList = arrayList
+        notifyDataSetChanged()
+    }
+
+    //lateinit var posts : ArrayList < Posts>
+
+
+    override fun onBindViewHolder(holder: NameViewHolder, position: Int) {
+        holder.bindItem(newList[position])
+    }
+
+
+    class NameViewHolder(private val itemBinding: ListItemBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
+        fun bindItem(post: Posts) {
+            itemBinding.idTv.text = post.id.toString()
+            itemBinding.titleTv.text = post.title
+            itemBinding.itemList.setOnClickListener {
+                Navigation.findNavController(itemBinding.root).navigate(R.id.action_fullListFragment_to_specificElementFragment)
+
+            }
         }
     }
 
-    //es metodi gamoidzaxeba roca viewholderi iqmneba
-    //shesabamisi viewvs inflateic aq unda moxdes
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NameViewHolder {
-
-        val view = LayoutInflater.from(parent.context).
-        inflate(R.layout.name_item,parent,false)
-
-        return NameViewHolder(view)
-    }
-
-    //aq gvibrundeba pozicia romelic aqvs konkretul items listshi romelic axla
-    //dgas. am pozicias gamoviyenebt rata mivigot am poziciis shesabamisi
-    // data da mivawodot is viewHolders rata miabas es data im holderis UI-s
-
-    override fun onBindViewHolder(holder: NameViewHolder, position: Int) {
-        holder.bind(namesList[position])
-    }
-
-    //radganac recycleri warmoadgens lists, man unda icodes ramdeni nivtia
-    // listshi, shesabamisad im datalistis zoma unda daabrunos
-
     override fun getItemCount(): Int {
-        return namesList.size
+        return newList.size
     }
+
+
 }
