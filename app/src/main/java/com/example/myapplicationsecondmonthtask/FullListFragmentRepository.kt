@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object FullListFragmentRepository : LiveData<List<Posts>>() {
+object FullListFragmentRepository {
 
     var list = MutableLiveData <ArrayList <Posts>>()
     var item = MutableLiveData <Posts>()
@@ -31,7 +31,7 @@ object FullListFragmentRepository : LiveData<List<Posts>>() {
     return list
     }
 
-    fun getSeparateData () : MutableLiveData < Posts> {
+    /*fun getSeparateData () : MutableLiveData < Posts> {
         val call: Call<Posts> = RetrofitInstance.api.getSeparatePost()
         call.enqueue(object : Callback<Posts> {
             override fun onResponse(call: Call<Posts>, response: Response<Posts>) {
@@ -44,5 +44,5 @@ object FullListFragmentRepository : LiveData<List<Posts>>() {
                 Log.e(ContentValues.TAG, "Response Not Successful")
             }
         })
-    return item}
+    return item}*/
 }

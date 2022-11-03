@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.myapplicationsecondmonthtask.databinding.FragmentFullListBinding
 
 
 class FullListFragment : Fragment() {
 
-    private lateinit var binding: FragmentFullListBinding
+    lateinit var binding: FragmentFullListBinding
     private var filteredArrayList = arrayListOf<Posts>()
     private var dataArrayList = arrayListOf<Posts>()
     private var recyclerViewAdapter = NameAdapter()
@@ -32,26 +33,6 @@ class FullListFragment : Fragment() {
         getData()
 
         binding.recyclerView.adapter = recyclerViewAdapter
-
-        /*val call: Call<ArrayList<Posts>> = RetrofitInstance.api.getPosts()
-
-        call.enqueue(object : Callback<ArrayList<Posts>> {
-            override fun onResponse(
-                call: Call<ArrayList<Posts>>,
-                response: Response<ArrayList<Posts>>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    recyclerViewAdapter.setData(response.body()!!)
-                    dataArrayList = response.body()!!
-                }
-            }
-
-            override fun onFailure(call: Call<ArrayList<Posts>>, t: Throwable) {
-                Log.e(TAG, "Response Not Successful")
-            }
-
-        })*/
-        //dataArrayList = Posts
 
 
         binding.editText.addTextChangedListener(object : TextWatcher {

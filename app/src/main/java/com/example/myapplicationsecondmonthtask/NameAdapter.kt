@@ -1,15 +1,18 @@
 package com.example.myapplicationsecondmonthtask
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplicationsecondmonthtask.databinding.FragmentFullListBinding
 import com.example.myapplicationsecondmonthtask.databinding.ListItemBinding
 
 class NameAdapter :
     RecyclerView.Adapter<NameAdapter.NameViewHolder>() {
 
     var newList = ArrayList<Posts>()
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NameViewHolder {
@@ -42,8 +45,13 @@ class NameAdapter :
         fun bindItem(post: Posts) {
             itemBinding.idTv.text = post.id.toString()
             itemBinding.titleTv.text = post.title
+
+
             itemBinding.itemList.setOnClickListener {
-                Navigation.findNavController(itemBinding.root).navigate(R.id.action_fullListFragment_to_specificElementFragment)
+                val targetId: String = post.id.toString()
+                val action = FullListFragmentDirections.actionFullListFragmentToSpecificElementFragment(id = targetId)
+
+                Navigation.findNavController(itemBinding.root).navigate(action)
 
             }
         }

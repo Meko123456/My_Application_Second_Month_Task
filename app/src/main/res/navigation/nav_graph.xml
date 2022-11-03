@@ -19,6 +19,15 @@
         android:name="com.example.myapplicationsecondmonthtask.SpecificElementFragment"
         android:label="fragment_specific_element"
         tools:layout="@layout/fragment_specific_element" >
+       <!-- <argument
+            android:name="body"
+            app:argType="string"
+            android:defaultValue="body" />-->
+        <argument
+            android:name="id"
+            app:argType="string"
+            android:defaultValue="69" />
+
         <action
             android:id="@+id/action_specificElementFragment_to_fullListFragment"
             app:destination="@id/fullListFragment" />
